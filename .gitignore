@@ -1,0 +1,18 @@
+.DS_Store
+.workbuddy/
+__pycache__/
+*.pyc
+
+# User-created personal knowledge and attachments stay local.
+vault/*/00-raw/*
+!vault/*/00-raw/README.md
+vault/*/01-知识/_drafts/*
+!vault/*/01-知识/_drafts/README.md
+vault/*/01-知识/*.md
+!vault/*/01-知识/README.md
+vault/*/02-框架/*.md
+!vault/*/02-框架/README.md
+vault/*/03-实战/*.md
+!vault/*/03-实战/README.md
+vault/*/04-复盘/*.md
+!vault/*/04-复盘/README.md

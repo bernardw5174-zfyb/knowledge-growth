@@ -1,0 +1,19 @@
+starter_version: "0.2.0-rc.1"
+package_type: domain-first-starter-release-candidate
+governance_mode: collaborative
+truth_source: local-workspace
+input_mode:
+  primary: chat-attachment
+  fallback: runtime-file-picker
+active_domains: []
+write_policy:
+  raw: byte-copy-only
+  drafts: agent-write
+  formal_wiki: user-confirmation-required
+  frameworks: user-confirmed-proposal-required
+  decisions: user-explicit-instruction-required
+  reviews: user-explicit-instruction-required
+privacy:
+  expose_attachment_absolute_path: false
+  expose_local_username: false
+  allow_attachment_path_only_for_copy_script: true
