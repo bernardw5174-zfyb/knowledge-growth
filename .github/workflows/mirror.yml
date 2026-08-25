@@ -27,4 +27,5 @@ jobs:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
           git remote add gitee "https://oauth2:${GITEE_TOKEN}@gitee.com/BernardW/knowledge-growth.git"
-          git push --mirror gitee
+          git push --force --all gitee
+          git push --force --tags gitee || true
