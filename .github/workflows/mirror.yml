@@ -1,0 +1,30 @@
+name: Mirror to Gitee
+
+# 只推 GitHub，云端自动把代码镜像到 Gitee（解决国内访问 GitHub 慢/被墙问题）。
+# 依赖：GitHub 仓库 Settings → Secrets → Actions 中需添加仓库密钥
+#   GITEE_TOKEN = 你的 Gitee 私人令牌（权限勾 projects 即可）
+# 首次使用前，请先在本地执行一次 `git push gitee main` 完成初始镜像（见 README「Gitee 镜像」一节）。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gitee-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 完整的提交历史，保证镜像一致
+
+      - name: Push to Gitee (mirror)
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          git remote add gitee "https://oauth2:${GITEE_TOKEN}@gitee.com/BernardW/knowledge-growth.git"
+          git push --mirror gitee

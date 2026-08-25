@@ -192,6 +192,24 @@ python3 -m unittest discover -s tests -v
 
 ---
 
+## Gitee 镜像（国内访问）
+
+GitHub 在国内访问可能较慢或被墙。本仓库的**完整镜像**同步在 Gitee：
+
+- **GitHub（主仓）**：https://github.com/bernardw5174-zfyb/knowledge-growth
+- **Gitee（镜像）**：https://gitee.com/BernardW/knowledge-growth
+
+日常只推 GitHub；通过 GitHub Actions 自动把每次提交镜像到 Gitee（见 `.github/workflows/mirror.yml`）。首次使用前需在本地执行一次初始镜像：
+
+```bash
+git remote add gitee https://gitee.com/BernardW/knowledge-growth.git
+git push gitee main
+```
+
+之后你只需 `git push origin main`，Gitee 会自动跟上。
+
+---
+
 ## License
 
 [MIT](LICENSE)
