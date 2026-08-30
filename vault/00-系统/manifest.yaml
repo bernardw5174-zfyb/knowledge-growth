@@ -1,18 +1,41 @@
 starter_version: "0.2.0-rc.1"
 package_type: domain-first-starter-release-candidate
-governance_mode: collaborative
+
+# 治理档位：控制「知识 / 框架」写入的确认摩擦。任何档位下，「决策 / 实战 / 复盘」都需用户显式指令。
+governance_mode: collaborative   # 当前激活档位：free | collaborative | strict
+
 truth_source: local-workspace
 input_mode:
   primary: chat-attachment
   fallback: runtime-file-picker
 active_domains: []
+
+# 全局不变项（不随档位变化）
 write_policy:
-  raw: byte-copy-only
-  drafts: agent-write
-  formal_wiki: user-confirmation-required
-  frameworks: user-confirmed-proposal-required
-  decisions: user-explicit-instruction-required
-  reviews: user-explicit-instruction-required
+  raw: byte-copy-only            # Raw 一律字节级副本，只进不改
+  drafts: agent-write            # Agent 只写草稿；是否自动正式化另按档位
+
+# 三档策略：Agent 每次写入前，按 governance_mode 查对应档位执行
+governance_levels:
+  free:
+    label: 自由模式
+    formal_wiki: agent-may-promote            # 知识页可自动晋升，但须来源 / 事实 / 推断 / 未知 / 可逆下一步齐全
+    frameworks: candidate-draft-only          # 框架只生成候选草稿；用户确认结构后才写正式框架
+    decisions: user-explicit-instruction-required
+    reviews: user-explicit-instruction-required
+  collaborative:
+    label: 协作模式（默认）
+    formal_wiki: user-confirmation-required   # 草稿待确认；支持一次批量确认多个低风险项
+    frameworks: user-confirmed-proposal-required
+    decisions: user-explicit-instruction-required
+    reviews: user-explicit-instruction-required
+  strict:
+    label: 严格模式
+    formal_wiki: user-confirmation-required   # 确认前须补 source / confidence / 验证点或明确缺证
+    frameworks: user-confirmed-proposal-required
+    decisions: user-explicit-instruction-required
+    reviews: user-explicit-instruction-required
+
 privacy:
   expose_attachment_absolute_path: false
   expose_local_username: false
