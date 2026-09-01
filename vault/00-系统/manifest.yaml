@@ -1,5 +1,5 @@
-starter_version: "0.2.0-rc.1"
-package_type: domain-first-starter-release-candidate
+starter_version: "0.1.0"
+package_type: domain-first-starter
 
 # 治理档位：控制「知识 / 框架」写入的确认摩擦。任何档位下，「决策 / 实战 / 复盘」都需用户显式指令。
 governance_mode: collaborative   # 当前激活档位：free | collaborative | strict
