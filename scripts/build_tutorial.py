@@ -53,7 +53,7 @@ CSS = """
   size: A4;
   margin: 18mm 16mm 18mm 16mm;
   @bottom-center {
-    content: "知识生长 · 起步教程 v0.1.0 · 第 " counter(page) " / " counter(pages) " 页";
+    content: "知识生长 · 起步教程 v0.1.1 · 第 " counter(page) " / " counter(pages) " 页";
     font-size: 9pt;
     color: #888;
   }
@@ -152,7 +152,7 @@ def build_html(tutorial_md: str) -> str:
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>知识生长 · 起步教程 v0.1.0</title>
+<title>知识生长 · 起步教程 v0.1.1</title>
 <style>{CSS}</style>
 </head>
 <body>

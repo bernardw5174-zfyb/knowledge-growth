@@ -1,4 +1,4 @@
-starter_version: "0.1.0"
+starter_version: "0.1.1"
 package_type: domain-first-starter
 
 # 治理档位：控制「知识 / 框架」写入的确认摩擦。任何档位下，「决策 / 实战 / 复盘」都需用户显式指令。
