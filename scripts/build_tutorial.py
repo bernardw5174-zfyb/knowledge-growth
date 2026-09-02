@@ -6,9 +6,9 @@ build_tutorial.py — 从 README.md 生成离线教程 HTML 与 PDF。
 
 用法：在仓库根目录运行
   python3 scripts/build_tutorial.py
-产出（直接落在仓库内、随 Download ZIP 一起打包）：
-  第一次用-从这里开始.pdf        # 仓库根目录，双击即读
-  docs/第一次用-从这里开始.html  # HTML，引用 docs/images/ 的图片
+产出（直接落在仓库根目录下，随 Download ZIP 一起打包）：
+  第一次用-从这里开始.pdf    # 双击即读，跨设备显示一致
+  第一次用-从这里开始.html  # 双击浏览器即开，方便复制指令（引用 docs/images/ 的图片）
 """
 
 import re
@@ -18,7 +18,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 README_PATH = REPO_ROOT / "README.md"
 DOCS_DIR = REPO_ROOT / "docs"
-OUTPUT_HTML = DOCS_DIR / "第一次用-从这里开始.html"
+OUTPUT_HTML = REPO_ROOT / "第一次用-从这里开始.html"
 OUTPUT_PDF = REPO_ROOT / "第一次用-从这里开始.pdf"
 
 # PDF 教程用的精简版 README：只截「第一次用，从这里开始」到第一次跑通说明。
@@ -36,8 +36,8 @@ def slice_tutorial(readme_text: str) -> str:
         raise SystemExit("未在 README 中找到「第一次用，从这里开始」段落，请检查 README 结构是否变化。")
     body = match.group(1).rstrip()
 
-    # 把所有 docs/images/xxx.png 改成相对 dist/ 目录的相对路径
-    body = body.replace("](docs/images/", "](images/")
+    # HTML 与 README 同在仓库根目录，直接沿用 README 的 docs/images/ 相对路径即可；
+    # 若将来把 HTML 挪进子目录，需要在这里同步改写图片前缀。
 
     header = (
         "# 知识生长 · 起步教程（离线版）\n\n"
@@ -119,6 +119,23 @@ hr {
   border: 0;
   border-top: 1px solid #d0d7de;
   margin: 6mm 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 4mm 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 1px solid #d0d7de;
+  padding: 2mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: #f6f8fa;
+  font-weight: 600;
 }
 a { color: #0969da; text-decoration: none; }
 """
