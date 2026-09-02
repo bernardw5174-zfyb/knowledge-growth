@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>知识生长 · 起步教程 v0.1.0</title>
+<style>
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @bottom-center {
+    content: "知识生长 · 起步教程 v0.1.0 · 第 " counter(page) " / " counter(pages) " 页";
+    font-size: 9pt;
+    color: #888;
+  }
+}
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 11pt;
+  line-height: 1.65;
+  color: #1f2328;
+  max-width: 100%;
+  margin: 0;
+}
+h1, h2, h3, h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  page-break-after: avoid;
+}
+h1 { font-size: 22pt; margin-top: 0; margin-bottom: 8mm; border-bottom: 2px solid #1f2328; padding-bottom: 3mm; }
+h2 { font-size: 16pt; margin-top: 8mm; margin-bottom: 4mm; }
+h3 { font-size: 13pt; margin-top: 5mm; margin-bottom: 3mm; }
+h4 { font-size: 12pt; margin-top: 4mm; margin-bottom: 2mm; }
+p { margin: 2mm 0; }
+ul, ol { margin: 2mm 0 2mm 6mm; }
+li { margin: 1mm 0; }
+blockquote {
+  margin: 3mm 0;
+  padding: 2mm 3mm;
+  border-left: 3px solid #d0d7de;
+  background: #f6f8fa;
+  color: #57606a;
+  font-size: 10.5pt;
+  page-break-inside: avoid;
+}
+blockquote blockquote { background: transparent; padding: 0; margin: 1mm 0; }
+code {
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 10pt;
+  background: #f6f8fa;
+  padding: 1pt 3pt;
+  border-radius: 2pt;
+}
+pre {
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 4pt;
+  padding: 3mm;
+  overflow-x: auto;
+  font-size: 9.5pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+}
+pre code { background: transparent; padding: 0; font-size: inherit; }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 4mm auto;
+  border: 1px solid #d0d7de;
+  border-radius: 4pt;
+  page-break-inside: avoid;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #d0d7de;
+  margin: 6mm 0;
+}
+a { color: #0969da; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>知识生长 · 起步教程（离线版）</h1>
+<blockquote>
+<p><strong>第一次用，从这里开始。</strong>一屏一个动作，每一步做完再走下一步。</p>
+</blockquote>
+<p>本教程与 GitHub 仓库 README 同源；改动以 GitHub 为准，PDF 为派生。</p>
+<hr />
+<h2>第一次用，从这里开始</h2>
+<p>一屏一个动作，每一步做完再走下一步。</p>
+<h3>1. 准备</h3>
+<ul>
+<li>一台 <strong>Windows 电脑</strong>；</li>
+<li>一份<strong>不敏感</strong>的文件：Word、PDF、Markdown 都可以（不要用身份证、病历、合同、公司机密或他人隐私）。</li>
+</ul>
+<h3>2. 安装 WorkBuddy 桌面端</h3>
+<p>从官网安装：<strong>https://www.workbuddy.cn/</strong> （请从官方入口下载，不要用第三方下载站）。</p>
+<blockquote>
+<p>【截图位】Windows 下载页</p>
+</blockquote>
+<h3>3. 下载「知识生长」起步包</h3>
+<p>任选一个能打开的地址，下载 ZIP 并解压：</p>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/bernardw5174-zfyb/knowledge-growth</li>
+<li><strong>Gitee</strong>（国内更快）：https://gitee.com/BernardW/knowledge-growth</li>
+</ul>
+<blockquote>
+<p><img alt="Gitee 仓库页面，「克隆/下载」下的「下载 ZIP」按钮" src="images/gitee-download.png" /></p>
+</blockquote>
+<p><strong>GitHub 入口参考</strong>（界面可能略有差异，认「Download ZIP」按钮即可）：</p>
+<blockquote>
+<p><img alt="GitHub 仓库页面，Code 菜单里的 Download ZIP 入口" src="images/github-download.png" /></p>
+</blockquote>
+<p>在页面找到下载入口（GitHub 点 <code>Code → Download ZIP</code>，Gitee 点「克隆/下载」），下载后解压，得到一个名为 <code>knowledge-growth</code> 的文件夹。<strong>不需要懂 Git、仓库或命令行。</strong></p>
+<h3>4. 把文件夹设为工作区</h3>
+<p>打开 WorkBuddy，新建一个对话，把刚解压出的 <code>knowledge-growth</code> 文件夹设为工作区。</p>
+<blockquote>
+<p><img alt="WorkBuddy 里「打开本地文件夹」对话框，选择下载好的 knowledge-growth 文件夹" src="images/set-workspace.png" /></p>
+</blockquote>
+<h3>5. 上传文件，发第一条指令</h3>
+<p>用你自己的材料：把第 1 步准备的那份文件，拖进对话框；想偷懒，直接把文件夹里的「示例材料.md」拖进去也行。</p>
+<p>拖完后，发下面这句话（整段复制，不用改）：</p>
+<blockquote>
+<p>请按这个工作区里的规则，处理我刚上传的这份文件：把内容分成「事实」「你的推断」「还不确定的」三块，先给我一版草稿，不要替我下结论。</p>
+</blockquote>
+<p>AI 可能回问你「归到哪个领域」——填「演示」就行。领域只是给材料贴个标签，这次先跑通，标签以后能改。</p>
+<blockquote>
+<p><img alt="WorkBuddy 里把「示例材料.md」拖入对话框的操作" src="images/select-material.png" /></p>
+</blockquote>
+<h3>6. 看见什么算成功</h3>
+<p>成功标志是两点，而不是一段漂亮的话：</p>
+<ul>
+<li>AI <strong>明确告诉你</strong>：你的原文件已经<strong>原样留了一份副本</strong>（并说清存在哪）；</li>
+<li>AI 给了你一份<strong>待确认的草稿</strong>，把「事实 / 推断 / 不确定」分开，而不是直接替你定了案。</li>
+</ul>
+<blockquote>
+<p><img alt="一次成功的草稿输出：事实、我的推断、还不确定的，三块分开列" src="images/result-display.png" /></p>
+</blockquote>
+<p>看到这两点，第一次就跑通了。至于目录长什么样、有哪些规则，第一天不用理解。</p>
+<hr />
+<h2>第一次跑通，只判断三件事</h2>
+<p>拿到草稿后，你不用读懂全文，只看三点：</p>
+<ul>
+<li><strong>事实</strong>：材料里真的这样说了吗？</li>
+<li><strong>推断</strong>：AI 的关联和解释，你认吗？</li>
+<li><strong>下一步</strong>：这一步对你的问题有用、且你愿意做吗？</li>
+</ul>
+<p>你说「确认」之后，它才会成为正式记录；不确认，就停在草稿，随时能改。</p>
+<hr />
+</body>
+</html>

@@ -6,22 +6,20 @@ build_tutorial.py — 从 README.md 生成离线教程 HTML 与 PDF。
 
 用法：在仓库根目录运行
   python3 scripts/build_tutorial.py
-产出：
-  dist/知识生长-起步教程-v0.1.0.html
-  dist/知识生长-起步教程-v0.1.0.pdf
+产出（直接落在仓库内、随 Download ZIP 一起打包）：
+  第一次用-从这里开始.pdf        # 仓库根目录，双击即读
+  docs/第一次用-从这里开始.html  # HTML，引用 docs/images/ 的图片
 """
 
 import re
 import shutil
-import subprocess
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 README_PATH = REPO_ROOT / "README.md"
-DIST_DIR = REPO_ROOT / "dist"
 DOCS_DIR = REPO_ROOT / "docs"
-OUTPUT_HTML = DIST_DIR / "知识生长-起步教程-v0.1.0.html"
-OUTPUT_PDF = DIST_DIR / "知识生长-起步教程-v0.1.0.pdf"
+OUTPUT_HTML = DOCS_DIR / "第一次用-从这里开始.html"
+OUTPUT_PDF = REPO_ROOT / "第一次用-从这里开始.pdf"
 
 # PDF 教程用的精简版 README：只截「第一次用，从这里开始」到第一次跑通说明。
 # 即从 ## 第一次用，从这里开始  到  ## 它解决什么问题 之间的内容。
@@ -169,12 +167,8 @@ def write_pdf_via_playwright(html_path: Path, pdf_path: Path) -> None:
 def main() -> None:
     if not README_PATH.exists():
         raise SystemExit(f"未找到 README：{README_PATH}")
-    DIST_DIR.mkdir(exist_ok=True)
-    # 同步 docs/images/ 到 dist/images/，让 HTML 中相对路径有效
-    target_images = DIST_DIR / "images"
-    if target_images.exists():
-        shutil.rmtree(target_images)
-    shutil.copytree(DOCS_DIR / "images", target_images)
+    if not (DOCS_DIR / "images").exists():
+        raise SystemExit(f"未找到 docs/images/，请先 commit 实操截图后再构建 PDF。")
 
     readme_text = README_PATH.read_text(encoding="utf-8")
     tutorial_md = slice_tutorial(readme_text)
