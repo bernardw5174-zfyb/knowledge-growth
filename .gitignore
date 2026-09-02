@@ -16,3 +16,4 @@ vault/*/03-实战/*.md
 !vault/*/03-实战/README.md
 vault/*/04-复盘/*.md
 !vault/*/04-复盘/README.md
+dist/

@@ -30,15 +30,19 @@
 - **GitHub**：https://github.com/bernardw5174-zfyb/knowledge-growth
 - **Gitee**（国内更快）：https://gitee.com/BernardW/knowledge-growth
 
-在页面找到下载入口（GitHub 点 `Code → Download ZIP`，Gitee 点「克隆/下载」），下载后解压，得到一个名为 `knowledge-growth` 的文件夹。**不需要懂 Git、仓库或命令行。**
+> ![Gitee 仓库页面，「克隆/下载」下的「下载 ZIP」按钮](docs/images/gitee-download.png)
 
-> 【截图位】下载 ZIP 与解压
+**GitHub 入口参考**（界面可能略有差异，认「Download ZIP」按钮即可）：
+
+> ![GitHub 仓库页面，Code 菜单里的 Download ZIP 入口](docs/images/github-download.png)
+
+在页面找到下载入口（GitHub 点 `Code → Download ZIP`，Gitee 点「克隆/下载」），下载后解压，得到一个名为 `knowledge-growth` 的文件夹。**不需要懂 Git、仓库或命令行。**
 
 ### 4. 把文件夹设为工作区
 
 打开 WorkBuddy，新建一个对话，把刚解压出的 `knowledge-growth` 文件夹设为工作区。
 
-> 【截图位】选择文件夹作为工作区（不含用户名和绝对路径）
+> ![WorkBuddy 里「打开本地文件夹」对话框，选择下载好的 knowledge-growth 文件夹](docs/images/set-workspace.png)
 
 ### 5. 上传文件，发第一条指令
 
@@ -50,12 +54,16 @@
 
 AI 可能回问你「归到哪个领域」——填「演示」就行。领域只是给材料贴个标签，这次先跑通，标签以后能改。
 
+> ![WorkBuddy 里把「示例材料.md」拖入对话框的操作](docs/images/select-material.png)
+
 ### 6. 看见什么算成功
 
 成功标志是两点，而不是一段漂亮的话：
 
 - AI **明确告诉你**：你的原文件已经**原样留了一份副本**（并说清存在哪）；
 - AI 给了你一份**待确认的草稿**，把「事实 / 推断 / 不确定」分开，而不是直接替你定了案。
+
+> ![一次成功的草稿输出：事实、我的推断、还不确定的，三块分开列](docs/images/result-display.png)
 
 看到这两点，第一次就跑通了。至于目录长什么样、有哪些规则，第一天不用理解。
 
