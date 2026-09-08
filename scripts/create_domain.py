@@ -17,6 +17,68 @@ def workspace_root() -> Path:
     return Path(override).resolve() if override else Path(__file__).resolve().parents[1]
 
 
+def update_active_domains(manifest_path: Path, domain: str) -> bool:
+    """Add domain to manifest active_domains if not present. Returns True if changed."""
+    if not manifest_path.exists():
+        return False
+    lines = manifest_path.read_text(encoding="utf-8").splitlines()
+    out = []
+    i = 0
+    changed = False
+    found = False
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+        if stripped.startswith("active_domains:"):
+            found = True
+            rest = stripped[len("active_domains:"):].strip()
+            if rest == "[]":
+                # 显式空列表
+                out.append("active_domains:")
+                out.append(f"  - {domain}")
+                changed = True
+                i += 1
+                continue
+            elif rest.startswith("["):
+                # 内联列表 [a, b]
+                inner = rest[1:-1].strip()
+                items = [x.strip().strip('"\'') for x in inner.split(",") if x.strip()] if inner else []
+                if domain not in items:
+                    items.append(domain)
+                    out.append("active_domains:")
+                    for item in items:
+                        out.append(f"  - {item}")
+                    changed = True
+                else:
+                    out.append(line)
+                i += 1
+                continue
+            else:
+                # 多行列表：active_domains: 后跟 - item 行（rest 为空或非列表）
+                items = []
+                j = i + 1
+                while j < len(lines) and lines[j].strip().startswith("- "):
+                    items.append(lines[j].strip()[2:].strip())
+                    j += 1
+                if domain not in items:
+                    items.append(domain)
+                    out.append("active_domains:")
+                    for item in items:
+                        out.append(f"  - {item}")
+                    changed = True
+                else:
+                    out.extend(lines[i:j])
+                i = j
+                continue
+        out.append(line)
+        i += 1
+    if not found:
+        return False
+    if changed:
+        manifest_path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return changed
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("usage: python3 scripts/create_domain.py <domain>")
@@ -71,6 +133,10 @@ def main() -> int:
             else:
                 index = index.rstrip() + "\n" + entry + "\n"
             index_path.write_text(index, encoding="utf-8")
+
+    manifest_path = system_dir / "manifest.yaml"
+    if update_active_domains(manifest_path, domain):
+        print("manifest-updated: vault/00-系统/manifest.yaml")
 
     print(f"domain-ready: vault/{domain}")
     for folder in folders:

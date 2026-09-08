@@ -1,5 +1,7 @@
 # 知识生长 Starter v0.2 · 最小协议
 
+> **schema_version: 0.2.1 | last_reviewed: 2026-09-08**（随产品 v0.1.2 发布：加 `superseded_by` 字段；规则变更走仓库 changelog/决策记录，不维护文件内历史）
+
 ## 核心原则
 
 1. **领域优先**：文件先归领域，再按内容性质分为 Raw、知识、框架、实战、复盘。
@@ -42,6 +44,7 @@ source:
 
 - `source` 只能写工作区内相对路径。
 - `status`：`draft | active | frozen | archived`
+- `superseded_by`：可选，当前结论被取代时指向取代页面；不删旧页，保留演变痕迹
 - `confidence`：`high | medium | low`
 - `layer` 首版可用：`raw-data | methodology | experience | synthesis`
 

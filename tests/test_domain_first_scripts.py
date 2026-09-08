@@ -88,6 +88,26 @@ class DomainFirstScriptsTest(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("ERROR: invalid domain", result.stdout)
 
+    def test_create_domain_updates_manifest_active_domains(self) -> None:
+        manifest = self.workspace / "vault" / "00-系统" / "manifest.yaml"
+        manifest.write_text("active_domains: []\n", encoding="utf-8")
+
+        self.run_script(CREATE_DOMAIN, "学习")
+        text = manifest.read_text(encoding="utf-8")
+        self.assertIn("active_domains:", text)
+        self.assertIn("- 学习", text)
+
+        # 幂等：重复创建同一领域不重复添加
+        self.run_script(CREATE_DOMAIN, "学习")
+        text2 = manifest.read_text(encoding="utf-8")
+        self.assertEqual(text2.count("- 学习"), 1)
+
+        # 追加：新领域追加到列表
+        self.run_script(CREATE_DOMAIN, "健康")
+        text3 = manifest.read_text(encoding="utf-8")
+        self.assertIn("- 健康", text3)
+        self.assertEqual(text3.count("- 学习"), 1)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
