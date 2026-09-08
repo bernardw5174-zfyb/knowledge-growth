@@ -12,6 +12,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 CREATE_DOMAIN = ROOT / "scripts" / "create_domain.py"
 IMPORT_ATTACHMENT = ROOT / "scripts" / "import_attachment.py"
+IMPORT_URL = ROOT / "scripts" / "import_url.py"
 
 
 class DomainFirstScriptsTest(unittest.TestCase):
@@ -107,6 +108,92 @@ class DomainFirstScriptsTest(unittest.TestCase):
         text3 = manifest.read_text(encoding="utf-8")
         self.assertIn("- 健康", text3)
         self.assertEqual(text3.count("- 学习"), 1)
+
+
+class ImportUrlScriptTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import import_url
+
+        cls.import_url = import_url
+
+    def setUp(self) -> None:
+        self.tempdir = tempfile.TemporaryDirectory()
+        self.workspace = Path(self.tempdir.name) / "starter"
+        (self.workspace / "vault" / "00-系统").mkdir(parents=True)
+
+    def tearDown(self) -> None:
+        self.tempdir.cleanup()
+
+    def test_extract_body_prefers_js_content_and_keeps_image_placeholder(self) -> None:
+        html_text = (
+            "<html><body>"
+            "<script>var x=1;</script>"
+            "<div id='js_content'>"
+            "<p>第一段文字</p><p><img src='a.jpg'>第二段</p>"
+            "<script>var inner=2;</script>"
+            "</div>"
+            "<div>正文之外的内容不应出现</div>"
+            "</body></html>"
+        )
+        body = self.import_url.extract_body(html_text)
+        self.assertIn("第一段文字", body)
+        self.assertIn("[图片]", body)
+        self.assertIn("第二段", body)
+        self.assertNotIn("正文之外的内容不应出现", body)
+
+    def test_extract_title_prefers_og_title(self) -> None:
+        html_text = (
+            "<html><head><title>页内标题</title>"
+            "<meta property='og:title' content='分享标题'></head></html>"
+        )
+        self.assertEqual(self.import_url.extract_title(html_text), "分享标题")
+
+    def test_extract_date_from_published_time(self) -> None:
+        html_text = (
+            "<meta property='article:published_time' content='2026-06-13T10:00:00+08:00'>"
+        )
+        self.assertEqual(self.import_url.extract_date(html_text), "2026-06-13")
+
+    def test_build_raw_markdown_marks_non_byte_identical(self) -> None:
+        content = self.import_url.build_raw_markdown(
+            "标题",
+            "https://example.com/a",
+            "2026-06-13",
+            "2026-09-08 12:00 CST",
+            "正文内容",
+        )
+        self.assertIn("字节级完整性：**否**", content)
+        self.assertIn("原文 URL：https://example.com/a", content)
+        self.assertIn("正文内容", content)
+
+    def test_sanitize_filename_strips_illegal_chars(self) -> None:
+        self.assertEqual(self.import_url.sanitize_filename('a/b:c*d?e"f'), "abcdef")
+
+    def test_import_url_rejects_uninitialized_domain(self) -> None:
+        env = os.environ.copy()
+        env["STARTER_ROOT"] = str(self.workspace)
+        result = subprocess.run(
+            [sys.executable, str(IMPORT_URL), "https://example.com/", "学习"],
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("domain not initialized", result.stdout)
+
+    def test_import_url_rejects_non_http(self) -> None:
+        env = os.environ.copy()
+        env["STARTER_ROOT"] = str(self.workspace)
+        result = subprocess.run(
+            [sys.executable, str(IMPORT_URL), "ftp://example.com/", "学习"],
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("must start with http", result.stdout)
 
 
 if __name__ == "__main__":

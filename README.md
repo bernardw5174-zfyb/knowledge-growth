@@ -227,6 +227,9 @@ python3 scripts/create_domain.py "学习"
 # 将运行时明确提供的附件路径做字节级复制
 python3 scripts/import_attachment.py "/path/from-runtime/article.md" "学习"
 
+# 抓取 URL 正文，存为「非字节级」文本 Raw（附时间戳 + URL + 标注）
+python3 scripts/import_url.py "https://example.com/article" "学习"
+
 # 运行脚本行为测试
 python3 -m unittest discover -s tests -v
 ```
@@ -244,6 +247,7 @@ python3 -m unittest discover -s tests -v
 
 - **文件附件 / 运行时提供的本地文件路径**：本项目的正式支持路径。助手应运行复制脚本，完成字节级复制和校验。
 - **URL / 微信文章 / 登录墙网页**：是否能读取取决于运行时与网站限制。本项目**不承诺**任意 URL 都能入库。
+- **URL 能抓到正文时**：助手默认直接抓取正文，保存为「非字节级」文本 Raw（附抓取时间戳、原文 URL，显式标注非字节级原件），不再追问 Raw 口径；抓取丢失的图片、排版等内容会在 Raw 文件头如实标注。
 - 如果无法取得原始文件字节，助手不得把网页摘要或转写内容冒充为原文副本；可让用户提供 HTML/PDF/文本文件，或将「二手摘录」显式标为非字节级来源。
 
 详细行为边界见 [`AGENTS.md`](AGENTS.md)、[`vault/00-系统/schema.md`](vault/00-系统/schema.md) 与 [兼容性与验证](docs/兼容性与验证.md)。
