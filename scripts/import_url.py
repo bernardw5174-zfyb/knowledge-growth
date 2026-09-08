@@ -11,6 +11,7 @@ Usage: python3 scripts/import_url.py <url> <domain>
 Set STARTER_ROOT only for automated tests. Normal use derives the root
 from this script's parent directory.
 """
+from __future__ import annotations  # 允许 3.10 注解写法（str | None）在 Python 3.9 下延迟求值
 from datetime import date, datetime
 import gzip
 import html

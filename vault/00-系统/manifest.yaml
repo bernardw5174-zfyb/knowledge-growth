@@ -12,14 +12,18 @@ active_domains: []
 
 # 全局不变项（不随档位变化）
 write_policy:
-  raw: byte-copy-only            # Raw 一律字节级副本，只进不改
-  drafts: agent-write            # Agent 只写草稿；是否自动正式化另按档位
+  raw:
+    attachment: byte-copy-only            # 附件：领域内字节级副本，只进不改
+    url_capture: immutable-non-byte-text  # URL 网页抓取：非字节级文本副本（文件头显式标注），只进不改
+  drafts: agent-write            # Agent 只写草稿；是否正式化一律按档位等用户确认
 
 # 三档策略：Agent 每次写入前，按 governance_mode 查对应档位执行
+# 任何档位下知识页都不自动晋升：草稿须用户确认后才成为正式知识页（判断归人）。
+# 档位只调节「确认的摩擦」：free = 要素齐全可整批一次确认；collaborative = 逐份/低风险批量；strict = 确认前须补证。
 governance_levels:
   free:
     label: 自由模式
-    formal_wiki: agent-may-promote            # 知识页可自动晋升，但须来源 / 事实 / 推断 / 未知 / 可逆下一步齐全
+    formal_wiki: user-confirmation-required   # 停在 _drafts/ 等确认；要素齐全（来源/事实/推断/未知/可逆下一步）可整批一次确认
     frameworks: candidate-draft-only          # 框架只生成候选草稿；用户确认结构后才写正式框架
     decisions: user-explicit-instruction-required
     reviews: user-explicit-instruction-required

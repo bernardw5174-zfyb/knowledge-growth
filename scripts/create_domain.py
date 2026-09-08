@@ -110,7 +110,7 @@ def main() -> int:
         folder.mkdir(parents=True, exist_ok=True)
 
     readmes = {
-        domain_dir / "00-raw" / "README.md": "# 原始材料\n\n本领域原始材料的字节级副本。只进不改。\n",
+        domain_dir / "00-raw" / "README.md": "# 原始材料\n\n附件存字节级副本；URL 网页抓取存显式标注的「非字节级」文本副本。一律只进不改。\n",
         domain_dir / "01-知识" / "README.md": "# 知识\n\n只放用户明确确认过的知识页。\n",
         domain_dir / "01-知识" / "_drafts" / "README.md": "# 知识草稿\n\nAgent 生成、等待用户确认的草稿。未经确认不得晋升。\n",
         domain_dir / "02-框架" / "README.md": "# 框架\n\n只放用户确认过、可跨问题复用的判断规则。\n",
