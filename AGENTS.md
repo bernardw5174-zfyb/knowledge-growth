@@ -186,7 +186,7 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 
 1. 将草稿复制到同领域 `01-知识/` 顶层；
 2. 将 `status` 从 `draft` 改为 `active`；
-3. 记录确认日期；
+3. 在 frontmatter 记录 `confirmed_at: YYYY-MM-DD`（晋升日期；schema 字段，草稿不填）——这是晋升的机器可读留痕，供 `scripts/validate.py` 审计；
 4. 保留原 `_drafts/` 文件，除非用户明确要求其他处理。
 
 草稿中出现的稳定、跨问题可复用规则，只有用户明确说“提炼成框架”后才可进入框架候选流程。用户明确要记录某次判断、行动或验证点时才写 `03-实战/`；复盘结果才写 `04-复盘/`。
@@ -228,6 +228,8 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 - 不得访问网络，除非用户在本次任务明确授权；用户发来 URL 即视为授权抓取该 URL 的公开正文，但不得爬取其他页面或域名。
 
 ## 最终汇报格式
+
+**汇报前运行校验**：最终汇报前，若工作区存在 `scripts/validate.py`，先运行它（`python3 scripts/validate.py`，Windows 可用 `python`）并处理输出——`ERROR` 项必须先修正或向用户报告，不得带着 ERROR 汇报完成；`WARN` 项向用户说明后继续。
 
 ```text
 已创建：

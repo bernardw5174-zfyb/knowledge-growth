@@ -44,6 +44,7 @@ source:
 
 - `source` 只能写工作区内相对路径。
 - `status`：`draft | active | frozen | archived`
+- `confirmed_at`：晋升为正式知识页时填写，值 = 用户点「晋升」的日期（`YYYY-MM-DD`）。由 Agent 晋升动作写入；`draft` 草稿不填。这是「用户确认晋升」的机器可读留痕，供校验脚本审计
 - `superseded_by`：可选，当前结论被取代时指向取代页面；不删旧页，保留演变痕迹
 - `confidence`：`high | medium | low`
 - `layer` 首版可用：`raw-data | methodology | experience | synthesis`
