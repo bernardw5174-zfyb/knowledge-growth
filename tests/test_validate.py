@@ -79,7 +79,9 @@ class ValidateScriptTest(unittest.TestCase):
 
     def test_version_line_drift_is_error(self) -> None:
         manifest = self.workspace / "vault" / "00-系统" / "manifest.yaml"
-        text = manifest.read_text(encoding="utf-8").replace('starter_version: "0.1.2"', 'starter_version: "9.9.9"')
+        text = __import__("re").sub(
+            r'starter_version:\s*"[^"]+"', 'starter_version: "9.9.9"', manifest.read_text(encoding="utf-8")
+        )
         manifest.write_text(text, encoding="utf-8")
         result = self.run_validate()
         self.assertEqual(result.returncode, 2)

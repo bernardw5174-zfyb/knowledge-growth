@@ -1,6 +1,6 @@
-# 知识生长 Starter v0.2 · 最小协议
+# 知识生长 · 最小协议 schema v0.2
 
-> **schema_version: 0.2.2 | last_reviewed: 2026-09-08**（v0.2.1 随产品 v0.1.2 发布：加 `superseded_by` 字段；v0.2.2 补网页抓取 Raw 的非字节级标注口径）
+> **schema_version: 0.2.3 | last_reviewed: 2026-09-11**（本版随产品 v0.1.3 发布：加 `confirmed_at` 晋升留痕字段；沿革——0.2.1 加 `superseded_by`、0.2.2 补网页抓取 Raw 非字节级标注口径）
 
 ## 核心原则
 
