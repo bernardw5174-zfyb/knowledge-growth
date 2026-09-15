@@ -95,6 +95,7 @@ _FM_KEY_RE = {
     "confirmed_at": re.compile(r"^confirmed_at\s*:\s*(\d{4}-\d{2}-\d{2})", re.M),
     "schema_version": re.compile(r"schema_version\s*:\s*([0-9][0-9.]*)"),
     "released_with": re.compile(r"随产品 v([0-9][0-9.]*) 发布"),
+    "superseded_by": re.compile(r"^superseded_by\s*:\s*(.+)$", re.M),
 }
 
 
@@ -173,20 +174,6 @@ def _check_versions(root: Path, errors: list[str]) -> None:
 
 # --- Check 4: supersede temporal consistency --------------------------------
 
-_FM_STATUS_RE = re.compile(r"^status\s*:\s*(\w+)", re.M)
-_FM_SUPERSEDED_BY_RE = re.compile(r"^superseded_by\s*:\s*(.+)$", re.M)
-
-
-def _fm_status(text: str) -> str | None:
-    m = _FM_STATUS_RE.search(text)
-    return m.group(1) if m else None
-
-
-def _fm_superseded_by(text: str) -> str | None:
-    m = _FM_SUPERSEDED_BY_RE.search(text)
-    return m.group(1).strip() if m else None
-
-
 def _supersede_target_exists(root: Path, page: Path, raw_target: str) -> bool:
     """superseded_by 取值支持 裸文件名 / [[文件名]] / [[路径|别名]] 三种形态。"""
     t = raw_target.strip()
@@ -226,8 +213,8 @@ def _check_supersede(root: Path, warns: list[str], verbose: bool = False) -> Non
             for page in sorted(p for p in top.iterdir() if p.is_file() and p.suffix == ".md"):
                 rel = page.relative_to(root)
                 text = page.read_text(encoding="utf-8")
-                status = _fm_status(text)
-                superseded = _fm_superseded_by(text)
+                status = _fm_value(text, "status")
+                superseded = _fm_value(text, "superseded_by")
                 if superseded is None:
                     if status in ("frozen", "archived") and verbose:
                         warns.append(
