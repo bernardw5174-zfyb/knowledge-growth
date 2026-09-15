@@ -87,6 +87,51 @@ class ValidateScriptTest(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("version-error", result.stdout)
 
+    def test_active_with_superseded_by_is_warned(self) -> None:
+        (self.knowledge / "被取代页.md").write_text(
+            "---\ntitle: 被取代页\nstatus: active\nsuperseded_by: [[新页]]\n---\n正文\n",
+            encoding="utf-8",
+        )
+        result = self.run_validate()
+        self.assertEqual(result.returncode, 0)  # WARN 不产生 ERROR
+        self.assertIn("supersede-warn", result.stdout)
+        self.assertIn("status=active 却带 superseded_by", result.stdout)
+
+    def test_superseded_by_broken_link_is_warned(self) -> None:
+        (self.knowledge / "旧页.md").write_text(
+            "---\ntitle: 旧页\nstatus: frozen\nsuperseded_by: [[不存在的页]]\n---\n正文\n",
+            encoding="utf-8",
+        )
+        result = self.run_validate()
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("supersede-warn", result.stdout)
+        self.assertIn("指向页不存在", result.stdout)
+
+    def test_frozen_without_superseded_by_is_silent_by_default(self) -> None:
+        (self.knowledge / "冻结页.md").write_text(
+            "---\ntitle: 冻结页\nstatus: frozen\n---\n正文\n",
+            encoding="utf-8",
+        )
+        result = self.run_validate()
+        self.assertEqual(result.returncode, 0)
+        self.assertNotIn("supersede-note", result.stdout)
+
+    def test_frozen_without_superseded_by_shown_in_verbose(self) -> None:
+        (self.knowledge / "冻结页.md").write_text(
+            "---\ntitle: 冻结页\nstatus: frozen\n---\n正文\n",
+            encoding="utf-8",
+        )
+        env = os.environ.copy()
+        env["STARTER_ROOT"] = str(self.workspace)
+        result = subprocess.run(
+            [sys.executable, str(VALIDATE), "--verbose"],
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("supersede-note", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
