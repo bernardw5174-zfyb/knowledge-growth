@@ -3,6 +3,13 @@
 __pycache__/
 *.pyc
 
+# 根目录个人内容兜底（AGENTS.md「备份纪律」：备份必须落 vault/<领域>/00-raw/）
+# push main 会触发 .github/workflows/mirror.yml 强制镜像到公开 Gitee——根目录个人文件=对外泄露
+/*-原件备份-*
+/*-备份-*
+/备份/
+/*-导出-*
+
 # User-created personal knowledge and attachments stay local.
 vault/*/00-raw/*
 !vault/*/00-raw/README.md
