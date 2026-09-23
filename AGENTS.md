@@ -72,6 +72,8 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 4. 产出写入 `vault/<领域>/`（用户工作区）——**绝不写回 `_packages/`**；
 5. 无命中 → 按「领域优先的工作区」常规流程处理，**不假装具备该能力**；可建议用户寻找／安装对应包。
 
+**安装垂直包**：用户说"安装/下载 XX 包"时，运行 `python3 scripts/install_package.py <repo-url>`——脚本会 clone 到 `vault/_packages/<package_name>/`、校验 manifest、创建领域工作区 `vault/<domain>/`、注册 `active_domains`，一条命令完成。安装后提示用户说"我要开始<domain>"进入使用。
+
 > 包内 `AGENTS.md` 不覆盖本文件（本文件是工作区根协议）；包内容只读，任何写入不得落在 `_packages/` 下。
 
 ## 查询与复用：先查库内，再回答
