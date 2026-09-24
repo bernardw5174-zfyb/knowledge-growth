@@ -1,6 +1,6 @@
 # 知识生长 · 最小协议 schema v0.2
 
-> **schema_version: 0.2.3 | last_reviewed: 2026-09-11**（本版随产品 v0.1.4 发布：加 `confirmed_at` 晋升留痕字段；沿革——0.2.1 加 `superseded_by`、0.2.2 补网页抓取 Raw 非字节级标注口径）
+> **schema_version: 0.2.4 | last_reviewed: 2026-09-23**（本版补两条协议规则：晋升命名须与 `_drafts/` 前身同名 ＋ 词表/数据类知识页正文豁免；沿革——0.2.3 随产品 v0.1.4 发布：加 `confirmed_at` 晋升留痕字段；0.2.1 加 `superseded_by`、0.2.2 补网页抓取 Raw 非字节级标注口径）
 
 ## 核心原则
 
