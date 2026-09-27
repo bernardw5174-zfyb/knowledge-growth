@@ -5,9 +5,11 @@ Checks (aligns with AGENTS.md 最终汇报协议; run before reporting completio
 
 1. Privacy (WARN): 持久化文件中出现本机绝对路径 / 用户名 / 临时下载路径。
    命中输出为「待复核」而非硬失败——草稿正文可能正当地讨论路径模式。
-2. Promotion audit (WARN): `01-知识/` 顶层的 `status: active` 页须有
-   `confirmed_at`（机器可读晋升留痕，schema 字段）+ `_drafts/` 同名前身。
-   缺失说明晋升无据可查（审计语义，不是机械拦截）。
+2. Promotion audit (ERROR): `01-知识/` 顶层的 `status: active` 页须有
+   `confirmed_at`（机器可读晋升留痕，schema 字段）。缺失 = 晋升无据可查，
+   按 ERROR 拦截（2026-09-27 实测：3 张词表 active 无 confirmed_at 曾以
+   WARN 放行，导致"流程门形同虚设"——升级为硬失败）。`_drafts/` 同名前身
+   仅作 WARN 提示（词表走特殊路径，不走 _drafts，见求职包 01-知识/README）。
 3. Version lines (ERROR): manifest `starter_version`（产品线）与
    schema.md 头部「随产品 vX 发布」标注、README「当前版本」一致；
    schema.md 头部 `schema_version`（协议线）必须存在。
@@ -106,7 +108,7 @@ def _fm_value(text: str, key: str) -> str | None:
 
 # --- Check 2: promotion audit -----------------------------------------------
 
-def _check_promotion(root: Path, warns: list[str]) -> None:
+def _check_promotion(root: Path, warns: list[str], errors: list[str]) -> None:
     vault = root / "vault"
     if not vault.is_dir():
         return
@@ -122,9 +124,9 @@ def _check_promotion(root: Path, warns: list[str]) -> None:
             status = _fm_value(text, "status")
             if status == "active":
                 if _fm_value(text, "confirmed_at") is None:
-                    warns.append(f"promotion-warn: {rel}: status=active 但缺 confirmed_at（疑似未经用户确认晋升，或旧版未留痕）")
+                    errors.append(f"promotion-error: {rel}: status=active 但缺 confirmed_at（晋升无据可查；词表等特殊产物落盘时须带用户确认日期）")
                 if not drafts_dir.is_dir() or not (drafts_dir / page.name).exists():
-                    warns.append(f"promotion-warn: {rel}: 在 _drafts/ 未见同名前身（晋升审计弱检查，仅提示）")
+                    warns.append(f"promotion-warn: {rel}: 在 _drafts/ 未见同名前身（词表特殊路径豁免；普通知识页仍建议走草稿）")
             elif status == "draft":
                 # 草稿不应有 confirmed_at（schema：晋升动作才写入）
                 if _fm_value(text, "confirmed_at") is not None:
@@ -266,7 +268,7 @@ def main() -> int:
         errors.append("version-error: vault/ 目录缺失，不是有效的 Starter 工作区")
 
     # Check 2: promotion
-    _check_promotion(root, warns)
+    _check_promotion(root, warns, errors)
 
     # Check 3: versions
     _check_versions(root, errors)

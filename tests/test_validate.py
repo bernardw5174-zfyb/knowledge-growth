@@ -48,12 +48,13 @@ class ValidateScriptTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("validate: OK", result.stdout)
 
-    def test_active_page_without_confirmed_at_is_warned(self) -> None:
+    def test_active_page_without_confirmed_at_is_error(self) -> None:
         (self.knowledge / "无确认页.md").write_text(
             "---\ntitle: 无确认页\nstatus: active\n---\n正文\n", encoding="utf-8"
         )
         result = self.run_validate()
-        self.assertEqual(result.returncode, 0)  # WARN 不产生 ERROR
+        self.assertEqual(result.returncode, 2)  # 2026-09-27 起 promotion 缺 confirmed_at 升 ERROR
+        self.assertIn("promotion-error", result.stdout)
         self.assertIn("缺 confirmed_at", result.stdout)
 
     def test_compliant_active_page_is_not_warned(self) -> None:
@@ -89,11 +90,11 @@ class ValidateScriptTest(unittest.TestCase):
 
     def test_active_with_superseded_by_is_warned(self) -> None:
         (self.knowledge / "被取代页.md").write_text(
-            "---\ntitle: 被取代页\nstatus: active\nsuperseded_by: [[新页]]\n---\n正文\n",
+            "---\ntitle: 被取代页\nstatus: active\nconfirmed_at: 2026-09-09\nsuperseded_by: [[新页]]\n---\n正文\n",
             encoding="utf-8",
         )
         result = self.run_validate()
-        self.assertEqual(result.returncode, 0)  # WARN 不产生 ERROR
+        self.assertEqual(result.returncode, 0)  # supersede 仍 WARN；confirmed_at 已补避免 promotion-error 干扰
         self.assertIn("supersede-warn", result.stdout)
         self.assertIn("status=active 却带 superseded_by", result.stdout)
 
