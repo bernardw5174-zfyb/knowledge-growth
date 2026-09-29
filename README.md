@@ -224,7 +224,7 @@ vault/
 # 创建一个已确认领域
 python3 scripts/create_domain.py "学习"
 
-# 一键安装垂直包（clone 到 _packages/ + 建领域工作区 + 注册 active_domains）
+# 一键安装垂直包（clone 到 _packages/ + 建领域工作区 + 注册 active_domains；可用包见 [docs/可用垂直包.md](docs/可用垂直包.md)）
 python3 scripts/install_package.py "https://github.com/bernardw5174-zfyb/job-search-bw.git"
 
 # 将运行时明确提供的附件路径做字节级复制
@@ -258,7 +258,7 @@ python3 -m unittest discover -s tests -v
 - **URL 能抓到正文时**：助手默认直接抓取正文，保存为「非字节级」文本 Raw（附抓取时间戳、原文 URL，显式标注非字节级原件），不再追问 Raw 口径；抓取丢失的图片、排版等内容会在 Raw 文件头如实标注。
 - 如果无法取得原始文件字节，助手不得把网页摘要或转写内容冒充为原文副本；可让用户提供 HTML/PDF/文本文件，或将「二手摘录」显式标为非字节级来源。
 
-详细行为边界见 [`AGENTS.md`](AGENTS.md)、[`vault/00-系统/schema.md`](vault/00-系统/schema.md)、[兼容性与验证](docs/兼容性与验证.md) 与 [垂直包](docs/垂直包.md)。
+详细行为边界见 [`AGENTS.md`](AGENTS.md)、[`vault/00-系统/schema.md`](vault/00-系统/schema.md)、[兼容性与验证](docs/兼容性与验证.md)、[垂直包](docs/垂直包.md) 与 [可用垂直包](docs/可用垂直包.md)。
 
 ---
 
