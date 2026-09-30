@@ -80,6 +80,13 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 3. 安装会 git clone 远程仓库——用户说"帮我安装"即视为本次任务联网授权，**只在安装动作内联网**。
 4. 脚本执行完：clone 到 `vault/_packages/<package_name>/`、校验 manifest、创建领域工作区 `vault/<domain>/`、注册 `active_domains`。安装后提示用户说"我要开始<domain>"进入使用。
 
+**升级**：
+1. 用户说「升级 XX 包／求职知识库」→ 检查 `vault/_packages/<包名>/` 已安装 → `cd vault/_packages/<包名> && git pull` → 报告版本变化。未安装 → 提示先安装，**不假装升级**。
+2. 用户说「升级知识库底座／Core」→ **先检测根目录有没有 `.git`**：
+   - 有（git clone 安装）→ `git pull` → 运行 `python3 scripts/validate.py` 确认无 ERROR → 报告 `v0.1.x → v0.1.y`；
+   - 无（ZIP 解压安装）→ 如实说「ZIP 安装无法自动升级」，给手动路径：下载新版 ZIP → 迁移 `vault/` 用户数据 → 或改用 git clone 安装以支持日后自动升级。**不得假装升级成功。**
+3. 边界：用户说「升级」即视为本次任务联网授权，**仅限升级动作**；`git pull` 不触碰 `vault/` 用户数据（`.gitignore` 已排除）、不触碰 `_packages/` 已装包。
+
 > 包内 `AGENTS.md` 不覆盖本文件（本文件是工作区根协议）；包内容只读，任何写入不得落在 `_packages/` 下。
 
 ## 查询与复用：先查库内，再回答

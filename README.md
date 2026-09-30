@@ -227,6 +227,8 @@ python3 scripts/create_domain.py "学习"
 # 一键安装垂直包（clone 到 _packages/ + 建领域工作区 + 注册 active_domains；可用包见 [docs/可用垂直包.md](docs/可用垂直包.md)）
 python3 scripts/install_package.py "https://github.com/bernardw5174-zfyb/job-search-bw.git"
 
+# 升级：在 Agent 里说「升级求职知识库」或「升级知识库底座」即可（底座须 git clone 安装；ZIP 安装无法自动升级）
+
 # 将运行时明确提供的附件路径做字节级复制
 python3 scripts/import_attachment.py "/path/from-runtime/article.md" "学习"
 
