@@ -82,6 +82,7 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 
 **升级**：
 1. 用户说「升级 XX 包／求职知识库」→ 检查 `vault/_packages/<包名>/` 已安装 → `cd vault/_packages/<包名> && git pull` → 报告版本变化。未安装 → 提示先安装，**不假装升级**。
+   - **更新判据（2026-10-11 实测补）：版本号 + commit 双层比对**——包维护者常在**版本号不变**的情况下提交内容更新（manifest `version` 不动、CHANGELOG 记 `[未发布]`），**判断有无更新不能只看版本号**。正确流程：`git fetch` → 比对本地 HEAD 与 `origin/main` 的 commit hash，有差异即有更新；`git pull` 报 `Already up to date` 时**必须交叉验证**（`git log @{u}..HEAD` 与 `HEAD..@{u}` 均为空 + 本地/远端 hash 一致才算真无更新），不得直接采信"没更新"。报告格式：版本号（如 v0.1.1）＋ commit hash（如 728154a），让用户能区分"版本没变但内容更新了"。
 2. 用户说「升级知识库底座／Core」→ **先检测根目录有没有 `.git`**：
    - 有（git clone 安装）→ `git pull` → 运行 `python3 scripts/validate.py` 确认无 ERROR → 报告 `v0.1.x → v0.1.y`；
    - 无（ZIP 解压安装）→ 给两个选项：
