@@ -54,21 +54,36 @@ _ABSOLUTE_PATH_MARKERS = [
 ]
 _TEMP_DOWNLOAD_MARKERS = ["Downloads", "AppData\\Local\\Temp"]
 
+# 通用词黑名单：这些词作为登录名/家目录名时极常见（容器/CI/沙箱默认身份），
+# 且作为普通字符串大量出现在正文（如命令行参数 --root、路径 /root/），
+# 命中必然误报——不参与用户名隐私扫描（2026-10-17 补，root 误报实测）。
+_COMMON_USERNAME_WORDS = {
+    "root", "admin", "user", "test", "guest", "ubuntu", "runner",
+    "vagrant", "docker", "nobody", "daemon", "www-data", "postgres",
+}
+
 
 def _username_hints() -> list[str]:
     """返回可能暴露本机用户名的字符串（家目录 basename + 登录名）。
 
     太短的常见词（user/admin/win 等）跳过，避免把普通内容误报成用户名。
+    通用词黑名单（root/admin/user/test 等）同样跳过——容器/CI/沙箱默认身份
+    命中正文普通字符串（如 --root）时必然误报，不参与扫描。
     """
     hints: list[str] = []
     home = Path.home()
-    if home.name and len(home.name) >= 4:
+    if home.name and len(home.name) >= 4 and home.name not in _COMMON_USERNAME_WORDS:
         hints.append(home.name)
     try:
         login = getpass.getuser()
     except Exception:
         login = ""
-    if login and login != home.name and len(login) >= 4:
+    if (
+        login
+        and login != home.name
+        and len(login) >= 4
+        and login not in _COMMON_USERNAME_WORDS
+    ):
         hints.append(login)
     return hints
 
