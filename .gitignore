@@ -11,6 +11,8 @@ __pycache__/
 /*-导出-*
 
 # User-created personal knowledge and attachments stay local.
+# 转换脚本系统级备份区（convert_to_git 注册状态备份，唯一例外见 AGENTS.md）
+vault/00-raw/
 vault/*/00-raw/*
 !vault/*/00-raw/README.md
 vault/*/01-知识/_drafts/*
