@@ -11,18 +11,23 @@ What it does:
     1. Detect no .git at workspace root (ZIP install)
     2. git init + git remote add origin <repo-url>
     3. git fetch origin
-    4. git reset --hard origin/main  (jump to latest main; vault/ user data untouched via .gitignore)
-    5. Report version change
+    4. Backup local registration files (manifest.yaml / index.md) — user's active_domains
+       and index registrations live in these git-tracked files and would be wiped by reset
+    5. git reset --hard origin/main  (jump to latest main; vault/ user data untouched via .gitignore)
+    6. Report version change + restoration pointers
 
 Safety:
     - vault/ user data is .gitignore'd, never touched
+    - Registration state (active_domains / index lines) backed up to vault/00-raw/ before reset
     - Template files (AGENTS.md etc.) modified locally WILL be overwritten by reset --hard — warn first
     - Idempotent: if .git already exists, report already git-installed, no-op
 """
 import os
 import re
+import shutil
 import subprocess
 import sys
+import time as _time
 from pathlib import Path
 
 DEFAULT_REPO = "https://github.com/bernardw5174-zfyb/knowledge-growth.git"
@@ -82,14 +87,33 @@ def main() -> int:
         print("提示：ZIP 安装转 git 需要联网拉取远程仓库；若网络受限，请保持 ZIP 手动升级路径。")
         return 1
 
-    # --- 4. reset --hard origin/main ---
+    # --- 4. backup local registration state before reset (2026-10-14) ---
+    # manifest.yaml (active_domains) and index.md (domain registrations) are git-tracked
+    # template files that ALSO hold user's local install state. reset --hard would wipe them.
+    registration_files = [
+        root / "vault" / "00-系统" / "manifest.yaml",
+        root / "vault" / "00-系统" / "index.md",
+    ]
+    backup_dir = root / "vault" / "00-raw" / f"_convert-backup-{_time.strftime('%Y%m%d-%H%M%S')}"
+    backed_up = []
+    for reg_file in registration_files:
+        if reg_file.exists():
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(reg_file, backup_dir / reg_file.name)
+            backed_up.append(reg_file.name)
+    if backed_up:
+        print(f"[convert_to_git] 已备份注册状态文件 → {backup_dir}")
+        for name in backed_up:
+            print(f"  - {name}（含 active_domains / 领域登记行，reset 后如被重置可据此恢复）")
+
+    # --- 5. reset --hard origin/main ---
     print("[convert_to_git] git reset --hard origin/main…")
     r = run(["git", "reset", "--hard", "origin/main"], cwd=root)
     if r.returncode != 0:
         print(f"ERROR: git reset --hard origin/main failed:\n{r.stderr}")
         return 1
 
-    # --- 5. report version ---
+    # --- 6. report version ---
     manifest = root / "vault" / "00-系统" / "manifest.yaml"
     version = "?"
     if manifest.exists():
@@ -100,6 +124,9 @@ def main() -> int:
     print(f"[convert_to_git] ✅ 转换完成。当前版本：v{version}")
     print("  → 以后升级直接说「升级知识库底座／Core」，或运行：git pull")
     print("  → vault/ 用户数据不受影响（.gitignore 已排除）")
+    if backed_up:
+        print(f"  ⚠️ 注册状态备份保留在：{backup_dir}")
+        print("     若 reset 后 active_domains / 领域登记行被重置，可从备份手动恢复（备份在 00-raw/ 忽略区，不会进 git）。")
     print("  ⚠️ 注意：转换时 reset 到最新 main，本地对模板文件（AGENTS.md 等）的修改会被覆盖；")
     print("     模板文件本就不应直接修改（协议要求复制到自己的目录再改）。")
     return 0

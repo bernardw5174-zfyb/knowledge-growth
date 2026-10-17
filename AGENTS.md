@@ -86,7 +86,7 @@ Windows 通常优先 python，其次 py；macOS/Linux 通常可用 python3。
 2. 用户说「升级知识库底座／Core」→ **先检测根目录有没有 `.git`**：
    - 有（git clone 安装）→ `git pull` → 运行 `python3 scripts/validate.py` 确认无 ERROR → 报告 `v0.1.x → v0.1.y`；
    - 无（ZIP 解压安装）→ 给两个选项：
-     a) **一次性转换为 git 安装**（推荐）：运行 `python3 scripts/convert_to_git.py`（git init + remote + fetch + reset 到最新 main；`vault/` 用户数据不受影响）→ 转换后即可 `git pull` 自动升级；
+     a) **一次性转换为 git 安装**（推荐）：运行 `python3 scripts/convert_to_git.py`（git init + remote + fetch + **reset 前自动备份注册状态文件**（`manifest.yaml`／`index.md` 含 active_domains 与领域登记行 → 备份至 `vault/00-raw/_convert-backup-*/`，reset 覆盖后可按备份恢复）→ 转换后即可 `git pull` 自动升级；
      b) 保持 ZIP：手动下载新版 ZIP → 迁移 `vault/` 用户数据。
    **不得假装升级成功。**
 3. 边界：用户说「升级」即视为本次任务联网授权，**仅限升级动作**；`git pull` 不触碰 `vault/` 用户数据（`.gitignore` 已排除）、不触碰 `_packages/` 已装包。
